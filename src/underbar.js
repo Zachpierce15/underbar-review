@@ -7,6 +7,7 @@
   // seem very useful, but remember it--if a function needs to provide an
   // iterator when the user does not pass one in, this will be handy.
   _.identity = function(val) {
+    return val;
   };
 
   /**
@@ -37,6 +38,19 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+    var copy = array.slice()
+    if (n === 0) {
+      return [];
+    }
+    if (!n) {
+      return copy.pop();
+    }
+    if (n > array.length) {
+      return array;
+    }
+    else {
+      return array.slice(n-1)
+    }
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -45,6 +59,21 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
+     //check if collection is an array or an object 
+     if(Array.isArray(collection)){
+       for(var i = 0; i < collection.length; i++) {
+          if (iterator){
+            iterator(collection[i],i,collection)
+          }
+        }
+      } 
+     else {
+        for (var keys in collection){
+          if (iterator){
+            iterator(collection[keys], keys, collection)
+          }
+        }
+      }
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -66,12 +95,31 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+     var result = [];
+    if (Array.isArray(collection) && test){
+      for (var i = 0; i < collection.length; i++) {
+        if(test(collection[i])) {
+          result.push(collection[i])
+        }
+      }
+    }
+    return result
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    var result = [];
+    for (var i = 0; i < collection.length; i++) {
+      if(!test(collection[i])) {
+        result.push(collection[i])
+      }
+    }
+    // if (!_.filter(collection, test)) {
+    //   return result
+    // }
+      return result
   };
 
   // Produce a duplicate-free version of the array.
