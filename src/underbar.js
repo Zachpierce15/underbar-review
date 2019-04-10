@@ -124,7 +124,21 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+   var result = [];
+   var placeHolder = [];
+   var compareArr = [];
+    if (isSorted && iterator) {
+      for (var i = 0; i < array.length; i++) {
+        placeHolder.push(iterator(array[i]))
+        if (!compareArr.includes(placeHolder[i])){
+            compareArr.push(array[i])
+          }
+        }
+      }
+
   };
+
+
 
 
   // Return the results of applying an iterator to each element.
@@ -132,6 +146,13 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var results = [];
+    if(Array.isArray(collection)) {
+      for(var i = 0; i < collection.length; i++) {
+        results.push(iterator(collection[i]))
+      }
+    }
+   return results
   };
 
   /*
@@ -173,6 +194,21 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    var acc;
+    if(Array.isArray(collection)) {
+      if (accumulator === undefined) {
+        acc = collection[0]
+        for (var i = 1; i < collection.length; i++) {
+          acc = iterator(acc, collection[i], i, collection)
+        }
+      } else {
+        acc = accumulator
+        for (var i = 0; i < collection.length; i++) {
+          acc = iterator(acc, collection[i], i, collection)
+        }
+      }     
+    }   
+    return acc
   };
 
   // Determine if the array or object contains a given value (using `===`).
